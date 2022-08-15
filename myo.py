@@ -23,5 +23,7 @@ def mayo_data():
         else:
             i+=1
     
-    myo.disconnect()
+    
     return a
+def myo_disconnect():
+    myo.disconnect()
