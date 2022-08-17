@@ -32,7 +32,7 @@ def closePort(USB_IF):
 def readData():
     try:        
         data = dev.read(endpoint.bEndpointAddress,
-                        endpoint.wMaxPacketSize, 100)
+                        endpoint.wMaxPacketSize, 500)
         
         flex_raw[0] = data[1]+(data[0]*256)
         flex_raw[1] = data[7]+(data[6]*256)

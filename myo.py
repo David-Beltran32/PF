@@ -9,7 +9,7 @@ def myo_connect():
     myo = MyoRaw(None)
     myo.add_emg_handler(myo_data_proc)
     myo.connect()
-def mayo_data():
+def myo_data():
     global myo
     global data
     a=[]

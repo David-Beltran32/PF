@@ -1,23 +1,38 @@
 from Glove import openPort,closePort,readData,USB_VENDOR,L_iD,USB_IF
 from myo_rawmdf import MyoRaw
-from myo import myo_connect, mayo_data,myo_disconnect
+from myo import myo_connect, myo_data,myo_disconnect
 import pandas as pd
+
 
 def collectData(N_Datos):
     myo_connect()
     openPort(USB_VENDOR,L_iD)
     n=N_Datos
-    b=[]
-    c=[]
+    myo_dato=[]
+    glove_dato=[]
+    print("iniciando lectura")
     for i in range(n):
-        b.append(mayo_data()[0])
-        c.append(tuple(readData()))
+        myo_dato.append(list(myo_data()[0]))
+        glove_dato.append(list(readData()))
     
     closePort(USB_IF)
     myo_disconnect()
-    return [b,c]
-[Datos_Banda, Datos_guante]=collectData(100)
-dat={"Glove_Data":Datos_guante,"Myo_Data":Datos_Banda}
-Datos=pd.DataFrame(dat)
-print(Datos)
-Datos.to_csv("Datos.csv")
+    print("Lectura finalizada")
+    print(glove_dato)
+    myo_df=pd.DataFrame(myo_dato)
+    
+    myo_df.columns=["emg1","emg2","emg3","emg4","emg5","emg6","emg7","emg8"]
+    
+    glove_df=pd.DataFrame(glove_dato)
+    
+    glove_df.columns=["Thumb","Index","Middle","Ring","Pinkie"]
+    print(glove_df)
+    df =myo_df.join(glove_df,how="right")
+    
+    return df
+
+
+df=collectData(1000)
+
+
+df.to_csv("Datos.csv")
