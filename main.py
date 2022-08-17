@@ -18,7 +18,7 @@ def collectData(N_Datos):
     closePort(USB_IF)
     myo_disconnect()
     print("Lectura finalizada")
-    print(glove_dato)
+   
     myo_df=pd.DataFrame(myo_dato)
     
     myo_df.columns=["emg1","emg2","emg3","emg4","emg5","emg6","emg7","emg8"]
@@ -26,7 +26,7 @@ def collectData(N_Datos):
     glove_df=pd.DataFrame(glove_dato)
     
     glove_df.columns=["Thumb","Index","Middle","Ring","Pinkie"]
-    print(glove_df)
+    
     df =myo_df.join(glove_df,how="right")
     
     return df
