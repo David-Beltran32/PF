@@ -35,7 +35,7 @@ Gesto_ts=test_data["Gesto"].copy()
 
 
 # %% clasificador random forest
-RF=RandomForestClassifier(max_depth=2)
+RF=RandomForestClassifier(max_depth=3)
 Gesto_cv_RF=cross_val_predict(RF,Sensor_tr,Gesto_tr,cv=5)
 MLP=MLPClassifier(random_state=1,hidden_layer_sizes=50)
 Gesto_cv_MLP=cross_val_predict(MLP,Sensor_tr,Gesto_tr,cv=5)
@@ -47,6 +47,8 @@ disp.plot()
 MLP_cm = confusion_matrix(Gesto_tr,Gesto_cv_MLP,labels=MLP.classes_)
 disp2 = ConfusionMatrixDisplay(confusion_matrix=MLP_cm, display_labels=MLP.classes_)
 disp2.plot()
+print(f"Acurracy MLP: {MLP.score(Sensor_ts,Gesto_ts)}")
+print(f"Acurracy RF: {RF.score(Sensor_ts,Gesto_ts)}")
 
 
 # %%
