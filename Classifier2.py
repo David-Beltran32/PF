@@ -6,11 +6,11 @@ import pandas as pd
 import seaborn as sns
 from sklearn.model_selection import cross_val_predict
 from sklearn.metrics import confusion_matrix, precision_score,recall_score, accuracy_score,ConfusionMatrixDisplay
-
+from joblib import dump
 df=pd.read_csv("./Datos.csv")
 df=df.drop(columns=["Unnamed: 0.1"]) 
 df=pd.concat([df.loc[df["Gesto"]==2],df.loc[df["Gesto"]==3],df.loc[df["Gesto"]==4],df.loc[df["Gesto"]==5],df.loc[df["Gesto"]==6]],ignore_index=True)
-df=pd.concat([df.loc[df["Unnamed: 0"]>=75,:]],ignore_index=True)
+df=pd.concat([df.loc[df["Unnamed: 0"]>=110,:]],ignore_index=True)
 df=df.drop(columns=["Unnamed: 0","Thumb","Index","Middle","Ring","Pinkie"]) 
 #%%
 train_data, test_data = train_test_split(df, train_size=0.7, random_state=20, stratify=df["Gesto"])
@@ -45,3 +45,5 @@ MLP_cm = confusion_matrix(Gesto_tr,Gesto_cv_MLP,labels=MLP.classes_)
 disp2 = ConfusionMatrixDisplay(confusion_matrix=MLP_cm, display_labels=MLP.classes_)
 disp2.plot()
 # %%
+dump(RF,"Class2.joblib")
+dump(MLP,"MLP_class2.joblib")
