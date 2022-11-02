@@ -8,7 +8,7 @@ from sklearn.model_selection import cross_val_predict
 from joblib import dump, load
 from sklearn.metrics import confusion_matrix, precision_score,recall_score, accuracy_score,ConfusionMatrixDisplay
 
-#%% procesamiento de datos
+ #%% procesamiento de datos
 df=pd.read_csv("./Datos.csv")
 df=df.drop(columns=["Unnamed: 0.1"]) 
 df=pd.concat([df.loc[df["Gesto"]==1],df.loc[df["Gesto"]==7]],ignore_index=True)
@@ -17,6 +17,7 @@ df=df.drop(columns=["Unnamed: 0","Thumb","Index","Middle","Ring","Pinkie"])
 #%% generacion del dataset de enternamiento y test
 train_data, test_data = train_test_split(df, train_size=0.7, random_state=20, stratify=df["Gesto"])
 test_data, dev_data = train_test_split(test_data, train_size=(2/3), random_state=20, stratify=test_data["Gesto"])
+
 print("distribucion de gestos set entrenamiento:")
 print(train_data["Gesto"].value_counts())
 print("distribucion de gestos set test:")
@@ -31,10 +32,15 @@ corr_matrix = train_data.corr()
 print(corr_matrix)
 # %% Generar los labels y los datos
 Sensor_tr=train_data.drop(["Gesto"],axis=1)
+x_mean=Sensor_tr.mean()
+x_std=Sensor_tr.std()
+Sensor_tr=(Sensor_tr-x_mean)/(x_std)
 Gesto_tr=train_data["Gesto"].copy()
 Sensor_ts=test_data.drop(["Gesto"],axis=1)
+Sensor_ts=(Sensor_ts-x_mean)/(x_std)
 Gesto_ts=test_data["Gesto"].copy()
-
+Sensor_ts.head()
+Sensor_tr.head()
 
 # %% clasificador random forest
 RF=RandomForestClassifier(max_depth=3)
@@ -54,7 +60,7 @@ print(f"Acurracy RF: {RF.score(Sensor_ts,Gesto_ts)}")
 
 
 # %%
-dump(RF,"Class2.joblib")
-dump(MLP,"MLP_class2.joblib")
+dump(RF,"./Models/Class_normalized.joblib")
+dump(MLP,"./Models/MLP_class_normalized.joblib")
 
 # %%
