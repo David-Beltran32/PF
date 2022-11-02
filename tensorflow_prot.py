@@ -44,7 +44,6 @@ while True:
         pi.set_servo_pulsewidth(15, (800-2200)*Dedo[4]+2200)
         pi.set_servo_pulsewidth(18, (2000-500)*Dedo[3]+500)
         pi.set_servo_pulsewidth(23, (1800-500)*Dedo[1]+500)
-
         pi.set_servo_pulsewidth(24, (2500-500)*Dedo[2]+500)
         counter=0
     else:
