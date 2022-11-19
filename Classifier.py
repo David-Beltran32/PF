@@ -64,3 +64,6 @@ dump(RF,"./Models/Class_normalized.joblib")
 dump(MLP,"./Models/MLP_class_normalized.joblib")
 
 # %%
+print(MLP.n_layers_)
+
+# %%

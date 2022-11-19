@@ -23,19 +23,9 @@ warnings.filterwarnings(action='ignore', category=UserWarning)
 #Coneccion de la banda myoelectrica y el GPIO
 pi=pigpio.pi()
 myo_connect()
-#Determinacion de Valores para normalizacion
-df=pd.read_csv("./Datos.csv")
-df=df.drop(columns=["Unnamed: 0.1"])
-x=df.drop(columns=["Unnamed: 0","Gesto"])
 
-train_data, test_data = train_test_split(x, train_size=0.7, random_state=20)
-test_data, val_data = train_test_split(test_data, train_size=(1/3), random_state=20)
-
-x_train=train_data.drop(columns=["Thumb","Index","Middle","Ring","Pinkie"],axis=1)
-x_max=x_train.max()
-x_min=x_train.min()
 #cargar el modelo
-model=load('MLP_class.joblib')
+model=load('./Models/MLP_class.joblib')
 
 tiempo=[]
 counter=0
@@ -44,9 +34,9 @@ while True:
     #print(counter)
     myo_dato=list(myo_data()[0])
     inicio=tm.time()
-    entrada=(myo_dato-x_min)/(x_max-x_min)
+    
     #print("Datos de entrada:", entrada)
-    Dedos.iloc[counter]=model.predict([entrada])[0]
+    Dedos.iloc[counter]=model.predict([myo_dato])[0]
     if counter>=2:
         #print(myo_dato)
         
