@@ -15,7 +15,6 @@ import pandas as pd
 import numpy as np
 import time as tm
 import math
-from sklearn.model_selection import train_test_split
 #off  Warning
 import warnings
 from sklearn.exceptions import DataConversionWarning
@@ -23,32 +22,20 @@ warnings.filterwarnings(action='ignore', category=UserWarning)
 #Coneccion de la banda myoelectrica y el GPIO
 pi=pigpio.pi()
 myo_connect()
-
-#Determinacion de Valores para normalizacion
-df=pd.read_csv("./Datos.csv")
-df=df.drop(columns=["Unnamed: 0.1"])
-x=df.drop(columns=["Unnamed: 0","Gesto"])
-
-train_data, test_data = train_test_split(x, train_size=0.7, random_state=20)
-test_data, val_data = train_test_split(test_data, train_size=(1/3), random_state=20)
-
-x_train=train_data.drop(columns=["Thumb","Index","Middle","Ring","Pinkie"],axis=1)
-x_max=x_train.max()
-x_min=x_train.min()
-#cargar el modelo
-model=load('Multiclass.joblib')
-
+model=load('./Models/Multiclass.joblib')
+x_min=np.array([12,12,13,12,11,12,13,13])
+x_max=np.array([1038,1457,1128,802,1297,1662,1457,1243])
 print(model)
 tiempo=[]
 counter=0
 Dedos=pd.DataFrame(np.zeros((3,5)))
 while True:
     #print(counter)
-    myo_dato=pd.DataFrame([list(myo_data()[0])])
+    myo_dato=list([myo_data()[0]])
     inicio=tm.time()
-    entrada=(myo_dato-x_min)/(x_max-x_min)
+    #entrada=(myo_dato-x_min)/(x_max-x_min)
     #print("Datos de entrada:", entrada)
-    Dedos.iloc[counter]=model.predict([entrada])[0]
+    Dedos.iloc[counter]=model.predict(myo_dato)[0]
     if counter>=2:
         Dedo=round(Dedos.mean(axis=0))
         print(Dedo)
