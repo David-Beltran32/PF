@@ -46,5 +46,5 @@ if not os.path.isdir(f"./Datos/Persona_{sys.argv[0]}/Gesto_{sys.argv[1]}/Dato_{s
         
             
 df.to_csv(f"./Datos/Persona_{sys.argv[0]}/Gesto_{sys.argv[1]}/Dato_{sys.argv[2]}.csv")
-p.write("done")
+
         
